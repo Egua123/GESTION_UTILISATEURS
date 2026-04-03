@@ -17,20 +17,25 @@ def verification_num_entree (num_entree, menu_ou_age, age_ou_num) :
 
 def menu() :
     menu_ou_age = " Entrer le chiffre correspondant à votre choix \n"
-    num_entree = input(""" 
-        Veuillez choisir l'une des options suivantes: 
-          
-           
-        1.  Ajouter un utilisateur (nom + âge)
-        2.  Afficher tous les utilisateurs
-        3.  Rechercher un utilisateur par nom  
-        4.  Quitter  
 
-    """)
-  
-    num_valide = verification_num_entree (num_entree, menu_ou_age )
-    return num_valide
+    while True:
+        num_entree = input(""" 
+            Veuillez choisir l'une des options suivantes: 
+            
+            
+            1.  Ajouter un utilisateur (nom + âge)
+            2.  Afficher tous les utilisateurs
+            3.  Rechercher un utilisateur par nom  
+            4.  Quitter  
+
+        """)
     
+        num_valide = verification_num_entree (num_entree, menu_ou_age, "num")
+
+        if num_valide is not None :    
+            return num_valide
+        else :
+            print("Vous n'avez pas rentrer le numéro approprié")
 
 def creer_utilisateur (nom, age):
     utilisateur = {
@@ -45,14 +50,14 @@ def rechercher_user_par_nom(liste, nom):
     for user in liste:
         if user.get("nom") == nom :
             return user
-            break
+            
     return None
 
 def existence_user(user):
     if user is None :
         print("Cet utilsateur n'existe pas \n")
     else :
-        print(f" vous avez cherher pour l'utilisateur {user.get("nom")} âgé de {user.get("age")}. \n")
+        print(f" vous avez cherher pour l'utilisateur {user.get('nom')} âgé de {user.get('age')}. \n")
 
 def action (num_valide, liste_utilisateurs) :
 
@@ -61,10 +66,10 @@ def action (num_valide, liste_utilisateurs) :
 
         nom = input("Quelle est votre nom au complet : \n")
         age = input("Quelle est votre äge : \n")
-        age_valide = verification_num_entree (age, menu_ou_age )
-        utilisateur = creer_utilisateur (nom, age)
+        age_valide = verification_num_entree (age, menu_ou_age, "age" )
+        utilisateur = creer_utilisateur (nom, age_valide)
         liste_utilisateurs.append(utilisateur)
-        print(f"{utilisateur.get("nom")} a été ajouté à la liste. \n" )
+        print(f"{utilisateur.get('nom')} a été ajouté à la liste. \n" )
 
 
     elif  num_valide == 2:
