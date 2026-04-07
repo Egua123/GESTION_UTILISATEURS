@@ -7,7 +7,7 @@ def verification_num_entree (num_entree, menu_ou_age, age_ou_num) :
     try :
         
         num_valide = int(num_entree)
-        if age_ou_num=="num" and num_valide >= 1 and num_valide <= 4 :
+        if age_ou_num=="num" and num_valide >= 1 and num_valide <= 6 :
             return num_valide
         elif age_ou_num =="age":
             return num_valide
@@ -62,6 +62,15 @@ def rechercher_user_par_nom(liste, nom):
             
     return None
 
+
+def afficher_utilisateurs(liste_utilisateurs):
+    if len(liste_utilisateurs) == 0:
+        print("Aucun utilisateur dans la liste.\n")
+    else:
+        for user in liste_utilisateurs:
+            print(f"Nom : {user['nom']}, Âge : {user['age']}")
+
+
 def existence_user(user):
     if user is None :
         print("Cet utilsateur n'existe pas \n")
@@ -76,14 +85,17 @@ def action (num_valide, liste_utilisateurs) :
         nom = input("Quelle est votre nom au complet : \n")
         age = input("Quelle est votre äge : \n")
         age_valide = verification_num_entree (age, menu_ou_age, "age" )
-        
-        ajouter_utilisateur(liste_utilisateurs, nom, age_valide)
-        
-        
-        
+        if age_valide is not None and verif_age(age_valide):
+            ajouter_utilisateur(liste_utilisateurs, nom, age_valide)
+        else:
+            print("Âge invalide.\n")
+         
 
     elif  num_valide == 2:
-        print(liste_utilisateurs)
+        print("\n--- Liste des utilisateurs ---")
+        afficher_utilisateurs(liste_utilisateurs)
+        print("-----------------------------\n")
+        
 
     elif  num_valide == 3:   
         nom = input("Quelle est le nom de l'utilisateur que vous chercher : \n")
@@ -91,12 +103,11 @@ def action (num_valide, liste_utilisateurs) :
         existence_user(user)
     elif  num_valide == 4:
         nom = input("Entree le nom complet de la personne à supprimer")
-        supprimer_utilisateur(liste_utilisateurs, nom):
+        supprimer_utilisateur(liste_utilisateurs, nom)
 
     
     elif  num_valide == 5:
         nom = input("Quel est le nom de l'utilisteur dont on veut faire les modifications : \n")
-        age = input("Quel est votre âge : \n")
         a_modifie = input("Rentrer le nom du champ a modifié")
         a_modifie_par =input(f"Rentrer ce par quoi vous voulez remplacer {a_modifie} :  \n")
         
@@ -164,7 +175,7 @@ def valider_modification(a_modifier, a_modifier_par):
                 print("Âge invalide.\n")
                 return None, None
         except:
-            print("Veuillez entrer un nombre valide.\n")
+            print("Veuillez entrer un âge valide.\n")
             return None, None
 
     # 3. Cas NOM
@@ -180,21 +191,28 @@ def valider_modification(a_modifier, a_modifier_par):
 
 
 
-def modifier_utilisateurs(liste_utilisateurs, nom, a_modifie, a_modifie_par):
+def modifier_utilisateurs(liste, nom, a_modifie, a_modifie_par):
     user = rechercher_user_par_nom(liste, nom)
+
     if user is None:
-        print(f"Le nom {nom} n'existe pas ou est erroné. \n Veuillez consulter la liste pour vérifier l,existence du nom. ")
+        print(f"Le nom {nom} n'existe pas ou est erroné.\nVeuillez consulter la liste pour vérifier l'existence du nom.\n")
+        return
 
-        
-    else:
-        if a_modifie in ["nom", "age"] and verif_age(age):
+    if a_modifie == "nom" :
+        autre_user = rechercher_user_par_nom(liste, a_modifie_par)
+        if autre_user is not None and autre_user is not user:
+            print("Ce nom existe déjà.\n")
+            return
 
-            user[a_modifie] = a_modifie_par
-            
-            sauvegarder_utilisateurs(liste)
-        
-        else:
-            print(f"le champ a modifié {a_modifie} n'existe pas ou est erroné. \n Veillez consulter le format de la liste en sélectionnant afficher la liste. \n")
+    # 3. Modification (seulement si tout est OK)
+    user[a_modifie] = a_modifie_par
+
+    # 4. Sauvegarde
+    sauvegarder_utilisateurs(liste)
+
+    print("Modification effectuée avec succès.\n")
+
+
     
        
 
